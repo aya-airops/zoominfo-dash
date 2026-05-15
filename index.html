@@ -27,7 +27,7 @@ body.light{
   --row-alt:rgba(0,140,68,.02);--row-hover:rgba(0,140,68,.05);--row-border:#e8f4ec;
   --input-bg:rgba(0,140,68,.04);--scroll-track:#dfeae3;--scroll-thumb:#a5c9b3;
   --scard-bg:#ffffff;--filter-bg:rgba(0,0,0,.01);--tbl-bg:#ffffff;
-  --accent:#008c44;--accent2:#005c2e;--label:#EEFF8C;--label-text:#000d05;
+  --accent:#008c44;--accent2:#005c2e;--label:#005c2e;--label-text:#ffffff;
 }
 html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Saans','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--scroll-track)}::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:3px}
@@ -89,8 +89,11 @@ tbody tr:last-child td{border-bottom:none}
 .tp-ml{background:rgba(0,255,100,.12);color:#00ff64;border:1px solid rgba(0,255,100,.2)}
 .tp-m{background:rgba(204,255,224,.12);color:#CCFFE0;border:1px solid rgba(204,255,224,.2)}
 .tp-le{background:rgba(238,255,140,.12);color:#EEFF8C;border:1px solid rgba(238,255,140,.2)}
+body.light .tp-ml{background:rgba(0,140,68,.1);color:#005c2e;border-color:rgba(0,140,68,.25)}
+body.light .tp-m{background:rgba(0,92,46,.07);color:#005c2e;border-color:rgba(0,92,46,.2)}
+body.light .tp-le{background:rgba(160,140,0,.1);color:#5a4a00;border-color:rgba(160,140,0,.2)}
 
-.copy-cell{position:relative;font-size:11px;color:var(--text4);line-height:1.5;max-width:220px;white-space:normal;cursor:pointer;padding:3px 5px;border-radius:5px;border:1px solid transparent;transition:border-color .15s,background .15s}
+.copy-cell{position:relative;font-size:11px;color:var(--text4);line-height:1.5;max-width:280px;white-space:normal;cursor:pointer;padding:3px 5px;border-radius:5px;border:1px solid transparent;transition:border-color .15s,background .15s}
 .copy-cell:hover{border-color:rgba(0,255,100,.25);background:rgba(0,255,100,.05);color:var(--text3)}
 .copy-cell .copy-hint{display:none;position:absolute;top:-26px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid rgba(0,255,100,.3);border-radius:0;padding:3px 8px;font-size:10px;font-weight:600;color:var(--accent);white-space:nowrap;pointer-events:none;z-index:20}
 .copy-cell:hover .copy-hint{display:block}
@@ -101,9 +104,12 @@ tbody tr:last-child td{border-bottom:none}
 .cit:hover{background:rgba(0,255,100,.14)}
 
 .da-hi{color:#00ff64;font-weight:600}
+body.light .da-hi{color:#008c44}
 .da-mid{color:#EEFF8C;font-weight:600}
+body.light .da-mid{color:#856a00}
 .da-lo{color:#4b5563}
 .price-yes{color:#00ff64;font-weight:600;font-size:12px}
+body.light .price-yes{color:#008c44}
 .price-no{color:#1f2540;font-size:12px}
 
 .long-cell{font-size:11px;color:var(--text4);line-height:1.5;max-width:200px;white-space:normal;cursor:default}
@@ -286,21 +292,41 @@ const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJUR_aeUic7rKq
 const COL = {d:0,s:1,dl:2,aa:3,w:5,pr:6,paid:8,t:9,cit:10,da:13,rp:14,p:15,snip:19,tl:20,cpub:21};
 
 // ── STATUS CONFIG ─────────────────────────────────────────────────────────────
-const SM = {
+const SM_DARK = {
   'Live':                          {bg:'rgba(0,255,100,.12)',   col:'#00ff64', dot:'#00e676'},
   'Waiting for Approval':          {bg:'rgba(238,255,140,.12)', col:'#EEFF8C', dot:'#d4e800'},
   'Live Waiting for link exchange':{bg:'rgba(0,200,100,.11)',   col:'#CCFFE0', dot:'#00c864'},
   'Negotiating':                   {bg:'rgba(245,158,11,.13)',  col:'#f59e0b', dot:'#f59e0b'},
-  // legacy — kept so old rows still render
   'Negotiation Failed':            {bg:'rgba(239,68,68,.12)',   col:'#ef4444', dot:'#ef4444'},
   'Rejected by client':            {bg:'rgba(239,68,68,.12)',   col:'#ef4444', dot:'#ef4444'},
   'On Hold - Link exchange':       {bg:'rgba(139,92,246,.13)',  col:'#a78bfa', dot:'#8b5cf6'},
+  'Waiting for Payment Details':   {bg:'rgba(245,158,11,.13)',  col:'#f59e0b', dot:'#f59e0b'},
+  'Waiting to go Live':            {bg:'rgba(59,130,246,.12)',  col:'#60a5fa', dot:'#3b82f6'},
+  'Live - Waiting for link exchange':{bg:'rgba(0,200,100,.11)',col:'#CCFFE0', dot:'#00c864'},
   'Pending':                       {bg:'rgba(107,114,128,.12)', col:'#9ca3af', dot:'#6b7280'},
   'Approved':                      {bg:'rgba(59,130,246,.12)',  col:'#60a5fa', dot:'#3b82f6'},
 };
-// Only the 4 active statuses appear in the dropdown and filter pills
+const SM_LIGHT = {
+  'Live':                          {bg:'rgba(0,140,68,.1)',     col:'#005c2e', dot:'#008c44'},
+  'Waiting for Approval':          {bg:'rgba(130,110,0,.1)',    col:'#5a4a00', dot:'#856a00'},
+  'Live Waiting for link exchange':{bg:'rgba(0,120,60,.09)',    col:'#005c2e', dot:'#00924a'},
+  'Negotiating':                   {bg:'rgba(180,100,0,.1)',    col:'#7a4400', dot:'#c47000'},
+  'Negotiation Failed':            {bg:'rgba(200,0,0,.08)',     col:'#9b0000', dot:'#cc0000'},
+  'Rejected by client':            {bg:'rgba(200,0,0,.08)',     col:'#9b0000', dot:'#cc0000'},
+  'On Hold - Link exchange':       {bg:'rgba(100,50,180,.09)',  col:'#4a2080', dot:'#7040c0'},
+  'Waiting for Payment Details':   {bg:'rgba(180,100,0,.1)',    col:'#7a4400', dot:'#c47000'},
+  'Waiting to go Live':            {bg:'rgba(0,80,180,.09)',    col:'#003a80', dot:'#0050c0'},
+  'Live - Waiting for link exchange':{bg:'rgba(0,120,60,.09)', col:'#005c2e', dot:'#00924a'},
+  'Pending':                       {bg:'rgba(80,80,80,.08)',    col:'#3a3a3a', dot:'#606060'},
+  'Approved':                      {bg:'rgba(0,80,180,.09)',    col:'#003a80', dot:'#0050c0'},
+};
 const ALL_S = ['Live','Waiting for Approval','Live Waiting for link exchange','Negotiating'];
-const sm = s => SM[s] || {bg:'rgba(107,114,128,.12)',col:'#9ca3af',dot:'#6b7280'};
+const sm = s => {
+  const map = document.body.classList.contains('light') ? SM_LIGHT : SM_DARK;
+  return map[s] || (document.body.classList.contains('light')
+    ? {bg:'rgba(80,80,80,.08)',col:'#3a3a3a',dot:'#606060'}
+    : {bg:'rgba(107,114,128,.12)',col:'#9ca3af',dot:'#6b7280'});
+};
 
 // ── LIVE DATA (populated from CSV on load, falls back to FALLBACK_ROWS) ───────
 let ROWS = [];
@@ -395,10 +421,11 @@ const COLS = [
 // ── MONTHS ────────────────────────────────────────────────────────────────────
 const MONTHS = ['Mar', 'Apr', 'May'];
 function rowMonth(r) {
-  const d = r.d || '';
-  if (d.startsWith('Mar')) return 'Mar';
-  if (d.startsWith('Apr')) return 'Apr';
-  if (d.startsWith('May')) return 'May';
+  // For live rows (Date Live is set), use Date Live for month bucketing
+  const dateStr = (r.dl && r.dl.trim()) ? r.dl : (r.d || '');
+  if (dateStr.startsWith('Mar')) return 'Mar';
+  if (dateStr.startsWith('Apr')) return 'Apr';
+  if (dateStr.startsWith('May')) return 'May';
   return '';
 }
 const MONTH_LABELS = {Mar:'Mar 2026', Apr:'Apr 2026', May:'May 2026'};
@@ -471,7 +498,7 @@ function renderStats() {
   const avgDA= das.length ? Math.round(das.reduce((a,b)=>a+b,0)/das.length) : 0;
   document.getElementById('stats').innerHTML = `
     <div class="scard"><div class="sl">Total</div><div class="sv">${src.length}</div></div>
-    <div class="scard"><div class="sl">Live</div><div class="sv" style="color:var(--accent)">${live}</div></div>
+    <div class="scard"><div class="sl">Live</div><div class="sv" style="color:var(--accent2)">${live}</div></div>
     <div class="scard"><div class="sl">Negotiating</div><div class="sv" style="color:#f59e0b">${neg}</div></div>
     <div class="scard"><div class="sl">Revenue</div><div class="sv" style="color:var(--label)">$${rev.toLocaleString()}</div></div>
     <div class="scard"><div class="sl">Avg DA</div><div class="sv">${avgDA||'—'}</div></div>
@@ -554,7 +581,7 @@ function render() {
       <td style="font-size:12px;color:var(--label);white-space:nowrap">${e(r.rp)||'—'}</td>
       <td>${hasPrice ? `<span class="price-yes">${e(r.p)}</span>` : '<span class="price-no">—</span>'}</td>
       <td>${snipHtml}</td>
-      <td>${r.tl ? `<a href="${e(r.tl)}" target="_blank" class="cit" style="max-width:130px;overflow:hidden;text-overflow:ellipsis">${trunc(r.tl,30)}</a>` : '<span style="color:var(--text6);font-size:12px">—</span>'}</td>
+      <td>${copyCell(r.tl, 'link')}</td>
       <td>${copyCell(r.cpub, 'copy')}</td>
     </tr>`;
   }).join('') : `<tr><td colspan="${COLS.length}" style="padding:44px;text-align:center;color:#1f2540;font-size:13px">No rows match your filters</td></tr>`;
@@ -566,14 +593,17 @@ function render() {
 
 // ── COPY CELL (snippet / copy from publisher) ─────────────────────────────────
 function copyCell(text, label) {
-  if (!text) return '<span style="color:#1f2540;font-size:12px">—</span>';
+  if (!text) return '<span style="color:var(--text6);font-size:12px">—</span>';
   const LIMIT = 80;
   const preview = text.length > LIMIT ? text.slice(0, LIMIT) + '…' : text;
-  return `<div class="copy-cell" onclick="copyText(this,'${e(text).replace(/'/g,'&#39;')}')">
+  const visitLink = label === 'link'
+    ? `<a href="${e(text)}" target="_blank" class="cit" style="margin-top:5px;display:inline-flex" onclick="event.stopPropagation()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Visit</a>` : '';
+  return \`<div class="copy-cell" onclick="copyText(this,'\${e(text).replace(/'/g,'&#39;')}')">
     <span class="copy-hint">Click to copy</span>
-    <span>${e(preview)}</span>
-    <div class="copy-full">${e(text)}</div>
-  </div>`;
+    <span>\${e(preview)}</span>
+    \${visitLink}
+    <div class="copy-full">\${e(text)}</div>
+  </div>\`;
 }
 
 // ── DROPDOWN ──────────────────────────────────────────────────────────────────
@@ -644,6 +674,7 @@ function toggleTheme() {
   document.getElementById('theme-icon-dark').style.display  = isLight ? 'none'  : '';
   document.getElementById('theme-icon-light').style.display = isLight ? ''      : 'none';
   document.getElementById('theme-label').textContent        = isLight ? 'Dark mode' : 'Light mode';
+  buildStatusPills(); render(); // re-render badges with new theme colors
 }
 // restore saved theme
 (function() {
