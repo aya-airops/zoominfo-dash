@@ -596,14 +596,16 @@ function copyCell(text, label) {
   if (!text) return '<span style="color:var(--text6);font-size:12px">—</span>';
   const LIMIT = 80;
   const preview = text.length > LIMIT ? text.slice(0, LIMIT) + '…' : text;
+  const safe = text.replace(/'/g, '&#39;');
   const visitLink = label === 'link'
-    ? `<a href="${e(text)}" target="_blank" class="cit" style="margin-top:5px;display:inline-flex" onclick="event.stopPropagation()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Visit</a>` : '';
-  return \`<div class="copy-cell" onclick="copyText(this,'\${e(text).replace(/'/g,'&#39;')}')">
-    <span class="copy-hint">Click to copy</span>
-    <span>\${e(preview)}</span>
-    \${visitLink}
-    <div class="copy-full">\${e(text)}</div>
-  </div>\`;
+    ? '<a href="' + e(text) + '" target="_blank" class="cit" style="margin-top:5px;display:inline-flex" onclick="event.stopPropagation()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Visit</a>'
+    : '';
+  return '<div class="copy-cell" onclick="copyText(this,\'' + safe + '\')">'
+    + '<span class="copy-hint">Click to copy</span>'
+    + '<span>' + e(preview) + '</span>'
+    + visitLink
+    + '<div class="copy-full">' + e(text) + '</div>'
+    + '</div>';
 }
 
 // ── DROPDOWN ──────────────────────────────────────────────────────────────────
